@@ -1,0 +1,39 @@
+{
+  "name": "create-from-blueprint",
+  "version": "1.0.0",
+  "description": "A command-line tool for generating file structures from blueprints",
+  "main": "index.js",
+  "bin": {
+    "create-from-blueprint": "./index.js"
+  },
+  "scripts": {
+    "test": "ava",
+    "test-w": "ava --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jokinen/create-component.git"
+  },
+  "author": "Jaakko Jokinen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jokinen/create-component/issues"
+  },
+  "homepage": "https://github.com/Jokinen/create-component#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "inquirer": "^6.0.0",
+    "stream-replace": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "1.0.0-beta.6",
+    "execa": "^0.10.0",
+    "mock-fs": "^4.5.0"
+  },
+  "createFromBlueprint": {
+    "component": "blueprints/{% component %}/",
+    "container": "blueprints/{% container %}/",
+    "styledComponent": "path/to/template/"
+  }
+}
