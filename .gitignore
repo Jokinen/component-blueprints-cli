@@ -1,3 +1,4 @@
 node_modules
 .vscode
 blueprints
+yarn-error.log
