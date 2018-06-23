@@ -1,4 +1,4 @@
-# create-from-blueprint
+# create-from-blueprint [![CircleCI](https://circleci.com/gh/Jokinen/component-blueprints-cli.svg?style=shield)](https://circleci.com/gh/Jokinen/component-blueprints-cli)
 
 Gives ability to create common file structures, such as for example components, à la Django's `manage.py startapp app-name`.
 
