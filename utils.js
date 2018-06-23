@@ -4,6 +4,7 @@ module.exports.replaceAll = replaceAll
 module.exports.escapeRegExp = escapeRegExp
 module.exports.newFileName = newFileName
 module.exports.capitalizeFirstLetter = capitalizeFirstLetter
+module.exports.lowercaseFirstLetter = lowercaseFirstLetter
 module.exports.createDirectory = createDirectory
 
 // https://stackoverflow.com/a/1144788/7200097
@@ -18,6 +19,9 @@ function replaceAll(str, find, replace) {
 // https://stackoverflow.com/a/1026087/7200097
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
+}
+function lowercaseFirstLetter(string) {
+  return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
 function newFileName(filename, type, newName) {

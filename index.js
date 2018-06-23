@@ -5,6 +5,7 @@ const createBlueprint = require('./createBlueprint')
 const chalk = require('chalk')
 const program = require('commander')
 const configs = require(path.resolve(process.cwd(), 'package.json')).createFromBlueprint
+const lowercaseFirstLetter = require('./utils').lowercaseFirstLetter
 
 program
   .arguments('<destination>')
@@ -39,6 +40,9 @@ function getInquirer(config = configs) {
       type: 'input',
       name: 'name',
       message: 'Name for the blueprint?',
+      filter: function(val) {
+        return lowercaseFirstLetter(val)
+      },
     },
   ]
 

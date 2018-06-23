@@ -6,6 +6,7 @@ import {
   escapeRegExp,
   newFileName,
   capitalizeFirstLetter,
+  lowercaseFirstLetter,
   createDirectory,
 } from './utils'
 
@@ -52,6 +53,7 @@ test('utils exports', t => {
     newFileName,
     capitalizeFirstLetter,
     createDirectory,
+    lowercaseFirstLetter,
   }
 
   Object.entries(exports).forEach(([key, val]) => {
@@ -93,6 +95,23 @@ test('capitalizeFirstLetter', (t) => {
     t.truthy(
       firstChar === firstChar.toUpperCase(),
       'should capitalize the first letter of the string'
+    )
+  })
+})
+
+test('lowercaseFirstLetter', (t) => {
+  const testStrings = [
+    'String',
+    'bringFling',
+    '1fing',
+  ]
+
+  testStrings.forEach((testString) => {
+    const firstChar = lowercaseFirstLetter(testString).charAt(0)
+
+    t.truthy(
+      firstChar === firstChar.toLowerCase(),
+      'should lowercase the first letter of the string'
     )
   })
 })
