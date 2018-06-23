@@ -35,6 +35,9 @@ function getInquirer(config = configs) {
       name: 'type',
       message: 'Type of the blueprint?',
       choices: Object.keys(config || {}),
+      filter: function(val) {
+        return lowercaseFirstLetter(val)
+      },
     },
     {
       type: 'input',

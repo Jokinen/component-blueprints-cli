@@ -25,7 +25,13 @@ function lowercaseFirstLetter(string) {
 }
 
 function newFileName(filename, type, newName) {
-  return replaceAll(filename, `{% ${ type } %}`, newName)
+  const replacedFirstCharLowercase =
+    replaceAll(filename, `{% ${ type } %}`, newName)
+  const capitalizedType = capitalizeFirstLetter(type)
+  const replacedFirstCharUppercase =
+    replaceAll(replacedFirstCharLowercase, `{% ${ capitalizedType } %}`, newName)
+
+  return replacedFirstCharUppercase
 }
 
 async function createDirectory(directory) {
