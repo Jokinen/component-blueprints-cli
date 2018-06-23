@@ -25,7 +25,7 @@ function newFileName(filename, type, newName) {
 }
 
 async function createDirectory(directory) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     fs.stat(directory, (err) => {
       if (err && err.code === 'ENOENT') {
         fs.mkdir(directory, resolve)
