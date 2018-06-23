@@ -5,7 +5,8 @@ const escapeRegExp = require('./utils').escapeRegExp
 const newFileName = require('./utils').newFileName
 const capitalizeFirstLetter = require('./utils').capitalizeFirstLetter
 const createDirectory = require('./utils').createDirectory
-const configs = require(path.resolve(process.cwd(), 'package.json')).createFromBlueprint
+const configs = require(path.resolve(process.cwd(), 'package.json'))
+  .createFromBlueprint
 
 function readdir(dir) {
   return new Promise((resolve) => {
@@ -34,7 +35,9 @@ function renameInjectCopy(file, blueprintSourceDir, targetDir, type, name) {
 
     read
       .pipe(replace(new RegExp(escapeRegExp(type), 'g'), name))
-      .pipe(replace(new RegExp(escapeRegExp(capitalizedType), 'g'), capitalizedName))
+      .pipe(
+        replace(new RegExp(escapeRegExp(capitalizedType), 'g'), capitalizedName)
+      )
       .pipe(write)
   })
 }
@@ -50,17 +53,17 @@ async function createBluePrint(type, name, destination) {
     throw directoryCreationErr
   }
 
-  const [ fileSearchErr, files ] = await readdir(blueprintSourceDir)
+  const [fileSearchErr, files] = await readdir(blueprintSourceDir)
 
   if (fileSearchErr) {
     throw fileSearchErr
   }
   if (!files || files.length === 0) {
-    throw new Error('The blueprint is empty or doesn\'t exist')
+    throw new Error("The blueprint is empty or doesn't exist")
   }
 
-  const fileCopies = files.map((file) => (
-    renameInjectCopy(file, blueprintSourceDir, targetDir, type, name))
+  const fileCopies = files.map((file) =>
+    renameInjectCopy(file, blueprintSourceDir, targetDir, type, name)
   )
 
   return Promise.all(fileCopies)

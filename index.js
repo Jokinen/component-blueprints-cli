@@ -4,18 +4,22 @@ const inquirer = require('inquirer')
 const createBlueprint = require('./createBlueprint')
 const chalk = require('chalk')
 const program = require('commander')
-const configs = require(path.resolve(process.cwd(), 'package.json')).createFromBlueprint
+const configs = require(path.resolve(process.cwd(), 'package.json'))
+  .createFromBlueprint
 const lowercaseFirstLetter = require('./utils').lowercaseFirstLetter
 
 program
   .arguments('<destination>')
   .option('-n, --name <name>', 'The name of the created component')
-  .option('-t, --type <type>', 'The name of the component type defined in the config')
+  .option(
+    '-t, --type <type>',
+    'The name of the component type defined in the config'
+  )
   .action(async (destination) => {
-    let { name, type, } = program
+    let { name, type } = program
 
     if (!name || !type) {
-      ({ name, type, } = await getInquirer())
+      ;({ name, type } = await getInquirer())
     }
 
     try {
@@ -53,11 +57,11 @@ function getInquirer(config = configs) {
 }
 
 function success(destination, name, type) {
-  const blueprintPath = path.resolve(process.cwd(), destination, name) 
+  const blueprintPath = path.resolve(process.cwd(), destination, name)
   const successMessage = [
-    `Created  ${ chalk.bgWhite.black.bold(' ' + name + ' ') }`,
-    `Type     ${ chalk.bold(type) }`,
-    `Path     ${ chalk.bold(blueprintPath) }`,
+    `Created  ${chalk.bgWhite.black.bold(' ' + name + ' ')}`,
+    `Type     ${chalk.bold(type)}`,
+    `Path     ${chalk.bold(blueprintPath)}`,
   ]
 
   successMessage.forEach((line) => {

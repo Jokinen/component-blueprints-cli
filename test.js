@@ -46,7 +46,7 @@ test('createBlueprint', async (t) => {
   */
 })
 
-test('utils exports', t => {
+test('utils exports', (t) => {
   const exports = {
     replaceAll,
     escapeRegExp,
@@ -57,17 +57,21 @@ test('utils exports', t => {
   }
 
   Object.entries(exports).forEach(([key, val]) => {
-    t.truthy(val, `utils should export ${ key }`)
+    t.truthy(val, `utils should export ${key}`)
   })
 })
 
 test('newFileName', (t) => {
   const type = 'testValue'
-  const filename = `{% ${ type } %}.js`
+  const filename = `{% ${type} %}.js`
   const newName = 'GivenName'
   const result = newFileName(filename, type, newName)
 
-  t.is(result, newName + '.js', 'should replace instances of {type} with newName')
+  t.is(
+    result,
+    newName + '.js',
+    'should replace instances of {type} with newName'
+  )
 })
 
 test('replaceAll', (t) => {
@@ -76,18 +80,18 @@ test('replaceAll', (t) => {
   const replace = 'three'
   const result = replaceAll(str, find, replace)
 
-  t.is(result, 'one three one three', 'should replace every instance of find with replace')
+  t.is(
+    result,
+    'one three one three',
+    'should replace every instance of find with replace'
+  )
 
   const result2 = replaceAll('{test}', '{', '[')
   t.is(result2, '[test}', 'should handle characters which need escaping')
 })
 
 test('capitalizeFirstLetter', (t) => {
-  const testStrings = [
-    'string',
-    'Bring',
-    '1fing',
-  ]
+  const testStrings = ['string', 'Bring', '1fing']
 
   testStrings.forEach((testString) => {
     const firstChar = capitalizeFirstLetter(testString).charAt(0)
@@ -100,11 +104,7 @@ test('capitalizeFirstLetter', (t) => {
 })
 
 test('lowercaseFirstLetter', (t) => {
-  const testStrings = [
-    'String',
-    'bringFling',
-    '1fing',
-  ]
+  const testStrings = ['String', 'bringFling', '1fing']
 
   testStrings.forEach((testString) => {
     const firstChar = lowercaseFirstLetter(testString).charAt(0)
@@ -119,7 +119,7 @@ test('lowercaseFirstLetter', (t) => {
 test('createDirectory', async (t) => {
   const testDirectory = 'sampleDir/anotherDir'
 
-  mock({ 'sampleDir': {} })
+  mock({ sampleDir: {} })
 
   const err = await createDirectory(testDirectory)
 

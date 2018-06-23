@@ -47,7 +47,8 @@ Define blueprints in your `package.json`
 **Where**
 * The path points to an existing folder or file
 * The keys (component, container) are used for the `type` option
-* Everything delimited with angle brackets (`{{}}`) will be replaced with the `name` option, also inside the file contents
+* Everything delimited with double angle brackets (`{{}}`) in file paths will be replaced with the `name` option
+* Every instance of `type`, capitalized or uncapitalized, will be replaced with `name`, capitalized appropriately
 
 ### TODO
 

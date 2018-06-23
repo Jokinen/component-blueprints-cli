@@ -10,7 +10,7 @@ module.exports.createDirectory = createDirectory
 // https://stackoverflow.com/a/1144788/7200097
 function escapeRegExp(str) {
   // eslint-disable-next-line
-  return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1")
+  return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')
 }
 function replaceAll(str, find, replace) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace)
@@ -25,11 +25,17 @@ function lowercaseFirstLetter(string) {
 }
 
 function newFileName(filename, type, newName) {
-  const replacedFirstCharLowercase =
-    replaceAll(filename, `{% ${ type } %}`, newName)
+  const replacedFirstCharLowercase = replaceAll(
+    filename,
+    `{% ${type} %}`,
+    newName
+  )
   const capitalizedType = capitalizeFirstLetter(type)
-  const replacedFirstCharUppercase =
-    replaceAll(replacedFirstCharLowercase, `{% ${ capitalizedType } %}`, newName)
+  const replacedFirstCharUppercase = replaceAll(
+    replacedFirstCharLowercase,
+    `{% ${capitalizedType} %}`,
+    newName
+  )
 
   return replacedFirstCharUppercase
 }
