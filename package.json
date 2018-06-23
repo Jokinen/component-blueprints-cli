@@ -6,6 +6,9 @@
   "bin": {
     "create-from-blueprint": "./index.js"
   },
+  "engines": {
+    "node": ">=v8.9.4"
+  },
   "scripts": {
     "test": "ava",
     "test-w": "ava --watch"
