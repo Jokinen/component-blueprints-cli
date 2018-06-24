@@ -30,11 +30,10 @@ function newFileName(filename, type, newName) {
     `{% ${type} %}`,
     newName
   )
-  const capitalizedType = capitalizeFirstLetter(type)
   const replacedFirstCharUppercase = replaceAll(
     replacedFirstCharLowercase,
-    `{% ${capitalizedType} %}`,
-    newName
+    `{% ${capitalizeFirstLetter(type)} %}`,
+    capitalizeFirstLetter(newName)
   )
 
   return replacedFirstCharUppercase

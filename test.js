@@ -63,13 +63,18 @@ test('utils exports', (t) => {
 
 test('newFileName', (t) => {
   const type = 'testValue'
-  const filename = `{% ${type} %}.js`
-  const newName = 'GivenName'
-  const result = newFileName(filename, type, newName)
+  const filenameLowerCase = `{% testValue %}.js`
+  const filenameUpperCase = `{% TestValue %}.js`
+  const newName = 'givenName'
 
   t.is(
-    result,
+    newFileName(filenameLowerCase, type, newName),
     newName + '.js',
+    'should replace lowercase instances of type with a lowercase newName'
+  )
+  t.is(
+    newFileName(filenameUpperCase, type, newName),
+     'GivenName.js',
     'should replace instances of {type} with newName'
   )
 })
