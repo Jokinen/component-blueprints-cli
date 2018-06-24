@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const replace = require('stream-replace')
+const junk = require('junk')
 const escapeRegExp = require('./utils').escapeRegExp
 const newFileName = require('./utils').newFileName
 const capitalizeFirstLetter = require('./utils').capitalizeFirstLetter
@@ -62,9 +63,11 @@ async function createBluePrint(type, name, destination) {
     throw new Error("The blueprint is empty or doesn't exist")
   }
 
-  const fileCopies = files.map((file) =>
-    renameInjectCopy(file, blueprintSourceDir, targetDir, type, name)
-  )
+  const fileCopies = files
+    .filter(junk.not)
+    .map((file) =>
+      renameInjectCopy(file, blueprintSourceDir, targetDir, type, name)
+    )
 
   return Promise.all(fileCopies)
 }
