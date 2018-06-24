@@ -22,10 +22,12 @@ program
       ;({ name, type } = await getInquirer())
     }
 
+    const lowerCaseName = lowercaseFirstLetter(name)
+    const lowerCaseType = lowercaseFirstLetter(type)
     try {
-      await createBlueprint(type, name, destination)
+      await createBlueprint(lowerCaseName, lowerCaseType, destination, configs)
 
-      success(destination, name, type)
+      success(destination, lowerCaseName, lowerCaseType)
     } catch (e) {
       process.stderr.write(chalk.red(e + '\n'))
     }
@@ -39,17 +41,11 @@ function getInquirer(config = configs) {
       name: 'type',
       message: 'Type of the blueprint?',
       choices: Object.keys(config || {}),
-      filter: function(val) {
-        return lowercaseFirstLetter(val)
-      },
     },
     {
       type: 'input',
       name: 'name',
       message: 'Name for the blueprint?',
-      filter: function(val) {
-        return lowercaseFirstLetter(val)
-      },
     },
   ]
 
