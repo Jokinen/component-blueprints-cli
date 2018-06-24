@@ -26,7 +26,7 @@ program
 
       success(destination, name, type)
     } catch (e) {
-      process.stderr.write(chalk.red(e + '\n'))
+      process.stderr.write(chalk.red(e.stack + '\n'))
     }
   })
   .parse(process.argv)
