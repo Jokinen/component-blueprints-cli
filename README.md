@@ -1,8 +1,10 @@
-# create-from-blueprint [![CircleCI](https://circleci.com/gh/Jokinen/create-from-blueprint.svg?style=shield)](https://circleci.com/gh/Jokinen/create-from-blueprint)
+# Create from Blueprint [![CircleCI](https://circleci.com/gh/Jokinen/create-from-blueprint.svg?style=shield)](https://circleci.com/gh/Jokinen/create-from-blueprint)
 
-Gives ability to create common file structures, such as for example components, à la Django's `manage.py startapp app-name`.
+Gives ability to copy a file structure into a certain path renaming the file paths and the files' content.
 
-Blueprint's are defined with `text files` and `folders` giving a lot of flexibility in defining based on your requirements.
+Can be used with React to provide `component` and `container` blueprints, in which case creating a new component is done with a single command instead of manually creating and filling all the files. This has the added benefit of providing teams the ability to offer and enforce common patterns for developers.
+
+## Getting started
 
 ### Install
 ```
@@ -12,15 +14,38 @@ yarn add -D create-from-blueprint
 npm i --save-dev create-from-blueprint
 ```
 
-### Quick instructions
-For an interactive session use
+## Usage
+### 1. Define blueprints in your `package.json`
+
+```json
+{
+  "createFromBlueprint": {
+    "component": "blueprints/{{component}}/",
+    "container": "blueprints/{{container}}/"
+  }
+}
+```
+**`key`**  
+Type of the blueprint (`component`, `container`)  
+
+**`value`**  
+A path pointing to an existing folder (`blueprints/{{component}}/`, ...)
+
+### 2. Run the command
 ```
 create-from-blueprint <destination>
 ```
-or traditionally
-```
-create-from-blueprint -n name -t type <destination>
-```
+2.1. **You'll be asked to choose a `type` from a list<sup>1</sup>**  
+2.2. **And input a `name`<sup>2</sup>** 
+ 
+Instances of `type`, beginning with a lowercase or uppercase letter, will be replaced with `name`
+* **`In file paths`**: Every instance of `{{type}}` will be replaced with `name`
+* **`In file contents`**: Every instance of `type` will be replaced with `name`
+
+<sup>1</sup> The list consists of `keys` from the config field 
+
+## Further details
+**Commander `--help` output**
 ```terminal
   $ create-from-blueprint --help
 
@@ -33,23 +58,22 @@ create-from-blueprint -n name -t type <destination>
     -h, --help         output usage information
 ```
 
-Define blueprints in your `package.json`
-
-```json
-{
-  "createFromBlueprint": {
-    "component": "blueprints/{{component}}/",
-    "container": "blueprints/{{container}}/"
-  }
-}
+When `type` or `name` is missing, both will be asked for with `inquirer`. You can input everything in one go as well by providing both (`type`, `name`) of the options.
+```
+create-from-blueprint -t component -n InvoiceItem components
 ```
 
-**Where**
-* The path points to an existing folder or file
-* The keys (component, container) are used for the `type` option
-* Everything delimited with double angle brackets (`{{}}`) in file paths will be replaced with the `name` option
-* Every instance of `type`, capitalized or uncapitalized, will be replaced with `name`, capitalized appropriately
+## Inspiration
+Django's `startapp` which automatically generates a base for a new application.
 
-### TODO
+## Built with
+* [Commander](https://github.com/tj/commander.js/)
+* [Inquirer](https://github.com/SBoudrias/Inquirer.js/)
+
+## License
+
+This project is licensed under the MIT License - see the [license](license) file for details
+
+## TODO
 
 - [ ] Single file blueprint support
