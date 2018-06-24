@@ -5,9 +5,8 @@ const junk = require('junk')
 const escapeRegExp = require('./utils').escapeRegExp
 const newFilePath = require('./utils').newFilePath
 const capitalizeFirstLetter = require('./utils').capitalizeFirstLetter
+const lowercaseFirstLetter = require('./utils').lowercaseFirstLetter
 const createDirectory = require('./utils').createDirectory
-const configs = require(path.resolve(process.cwd(), 'package.json'))
-  .createFromBlueprint
 
 function readdir(dir) {
   return new Promise((resolve) => {
@@ -43,10 +42,23 @@ function renameInjectCopy(file, blueprintSourceDir, targetDir, type, name) {
   })
 }
 
-async function createBluePrint(type, name, destination) {
+async function createBluePrint(type, name, destination, configs) {
+  if (!configs) {
+    throw new Error('No configs found')
+  }
+
   const blueprintSource = configs[type]
+
+  if (!blueprintSource) {
+    throw new Error(`No configs found for type ${type}`)
+  }
+
   const blueprintSourceDir = path.resolve(process.cwd(), blueprintSource)
-  const targetDir = path.resolve(process.cwd(), destination, name)
+  // Hack
+  const newDirName = blueprintSource.includes(capitalizeFirstLetter(type))
+    ? capitalizeFirstLetter(name)
+    : lowercaseFirstLetter(name)
+  const targetDir = path.join(process.cwd(), destination, newDirName)
 
   const directoryCreationErr = await createDirectory(targetDir)
 

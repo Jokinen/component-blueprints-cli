@@ -1,5 +1,7 @@
 import test from 'ava'
-import mock from 'mock-fs'
+import fs from 'fs'
+import path from 'path'
+import rimraf from 'rimraf'
 import createBlueprint from './createBlueprint'
 import {
   replaceAll,
@@ -10,29 +12,50 @@ import {
   createDirectory,
 } from './utils'
 
-test('createBlueprint', async (t) => {
-  t.truthy(createBlueprint)
-  // mock-fs doesn't work with this setup
-  /*mock({
-    'blueprints': {
-      '{% component %}': {
-        '{% component %}.js': 'Content'
-      }
-    },
-    'src': {
-      'components': {}
-    }
-  })
+test.before(() => {
+  const notRelative = (p) => path.resolve(process.cwd(), p)
 
+  if (!fs.existsSync(notRelative('blueprints'))) {
+    fs.mkdirSync(notRelative('blueprints'))
+    fs.mkdirSync(notRelative('blueprints/{% component %}'))
+    fs.writeFileSync(notRelative('blueprints/{% component %}/{% Component %}.js', 'Content'))
+  }
+
+  if (!fs.existsSync(notRelative('src'))) {
+    fs.mkdirSync(notRelative('src'))
+    fs.mkdirSync(notRelative('src/components'))
+  }
+})
+
+test.after.always(() => {
+  const notRelative = (p) => path.resolve(process.cwd(), p)
+
+  rimraf.sync(notRelative('blueprints'))
+  rimraf.sync(notRelative('src'))
+})
+
+test('createBlueprint', async (t) => {
   t.truthy(createBlueprint, 'should be defined')
 
-  const targetDir = 'src/components'
-  const name = 'Test'
+  if (!fs.existsSync('blueprints/{% component %}')) {
+    t.fails('The file should be created')
+  }
 
-  await createBlueprint('component', name, targetDir)
+  const targetDir = 'src/components'
+  const name = 'someComponent'
+  const configs = {
+    component: 'blueprints/{% component %}'
+  }
+
+  try {
+    await createBlueprint('component', name, targetDir, configs)
+  } catch (e) {
+    t.log(e.stack)
+    t.fail('An error should not be returned')
+  }
 
   const err = await new Promise((resolve) => {
-    fs.stat(`${ targetDir }/${ name }/${ name }.js`, (err) => {
+    fs.stat(`${ targetDir }`, (err) => {
       if (err) {
         return resolve(err)
       }
@@ -41,16 +64,14 @@ test('createBlueprint', async (t) => {
     })
   })
   
-  t.truthy(err, 'should create the new files as expected')
-  mock.restore()
-  */
+  t.falsy(err, 'should create the new files as expected')
 })
 
 test('utils exports', (t) => {
   const exports = {
     replaceAll,
     escapeRegExp,
-    newFileName,
+    newFilePath,
     capitalizeFirstLetter,
     createDirectory,
     lowercaseFirstLetter,
@@ -83,16 +104,17 @@ test('replaceAll', (t) => {
   const str = 'one two one two'
   const find = 'two'
   const replace = 'three'
-  const result = replaceAll(str, find, replace)
 
   t.is(
-    result,
+    replaceAll(str, find, replace),
     'one three one three',
     'should replace every instance of find with replace'
   )
-
-  const result2 = replaceAll('{test}', '{', '[')
-  t.is(result2, '[test}', 'should handle characters which need escaping')
+  t.is(
+    replaceAll('{test}', '{', '['), 
+    '[test}', 
+    'should handle characters which need escaping'
+  )
 })
 
 test('capitalizeFirstLetter', (t) => {
@@ -122,12 +144,8 @@ test('lowercaseFirstLetter', (t) => {
 })
 
 test('createDirectory', async (t) => {
-  const testDirectory = 'sampleDir/anotherDir'
-
-  mock({ sampleDir: {} })
-
+  const testDirectory = 'src/components/anotherDir'
   const err = await createDirectory(testDirectory)
 
   t.falsy(err)
-  mock.restore()
 })

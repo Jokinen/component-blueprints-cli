@@ -4,8 +4,6 @@ const inquirer = require('inquirer')
 const createBlueprint = require('./createBlueprint')
 const chalk = require('chalk')
 const program = require('commander')
-const configs = require(path.resolve(process.cwd(), 'package.json'))
-  .createFromBlueprint
 
 program
   .arguments('<destination>')
@@ -15,14 +13,15 @@ program
     'The name of the component type defined in the config'
   )
   .action(async (destination) => {
+    const configs = findConfigs() || {}
     let { name, type } = program
 
     if (!name || !type) {
-      ;({ name, type } = await getInquirer())
+      ;({ name, type } = await getInquirer(configs))
     }
 
     try {
-      await createBlueprint(name, type, destination, configs)
+      await createBlueprint(type, name, destination, configs)
 
       success(destination, name, type)
     } catch (e) {
@@ -31,7 +30,7 @@ program
   })
   .parse(process.argv)
 
-function getInquirer(config = configs) {
+function getInquirer(config) {
   const questions = [
     {
       type: 'list',
@@ -47,6 +46,11 @@ function getInquirer(config = configs) {
   ]
 
   return inquirer.prompt(questions)
+}
+
+function findConfigs() {
+  return require(path.resolve(process.cwd(), 'package.json'))
+    .createFromBlueprint
 }
 
 function success(destination, name, type) {

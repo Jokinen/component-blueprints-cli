@@ -10,7 +10,7 @@
     "node": ">=v8.9.4"
   },
   "scripts": {
-    "test": "ava",
+    "test": "ava test.js testProject/test.js",
     "test-w": "ava --watch"
   },
   "repository": {
@@ -28,7 +28,8 @@
     "commander": "^2.15.1",
     "inquirer": "^6.0.0",
     "junk": "^2.1.0",
-    "stream-replace": "^1.0.0"
+    "stream-replace": "^1.0.0",
+    "trim-right": "^1.0.1"
   },
   "devDependencies": {
     "ava": "1.0.0-beta.6",
@@ -39,8 +40,6 @@
     "prettier": "^1.13.5"
   },
   "createFromBlueprint": {
-    "component": "blueprints/{% component %}/",
-    "container": "blueprints/{% container %}/",
-    "styledComponent": "path/to/template/"
+    "component": "testProject/blueprints/{% component %}"
   }
 }
