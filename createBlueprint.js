@@ -3,7 +3,7 @@ const fs = require('fs')
 const replace = require('stream-replace')
 const junk = require('junk')
 const escapeRegExp = require('./utils').escapeRegExp
-const newFileName = require('./utils').newFileName
+const newFilePath = require('./utils').newFilePath
 const capitalizeFirstLetter = require('./utils').capitalizeFirstLetter
 const createDirectory = require('./utils').createDirectory
 const configs = require(path.resolve(process.cwd(), 'package.json'))
@@ -24,7 +24,7 @@ function readdir(dir) {
 function renameInjectCopy(file, blueprintSourceDir, targetDir, type, name) {
   return new Promise((resolve, reject) => {
     const source = path.join(blueprintSourceDir, file)
-    const destination = path.join(targetDir, newFileName(file, type, name))
+    const destination = newFilePath(path.join(targetDir, file), type, name)
     const read = fs.createReadStream(source)
     const write = fs.createWriteStream(destination)
     const capitalizedType = capitalizeFirstLetter(type)

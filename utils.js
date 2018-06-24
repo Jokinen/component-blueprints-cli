@@ -2,7 +2,7 @@ const fs = require('fs')
 
 module.exports.replaceAll = replaceAll
 module.exports.escapeRegExp = escapeRegExp
-module.exports.newFileName = newFileName
+module.exports.newFilePath = newFilePath
 module.exports.capitalizeFirstLetter = capitalizeFirstLetter
 module.exports.lowercaseFirstLetter = lowercaseFirstLetter
 module.exports.createDirectory = createDirectory
@@ -24,16 +24,16 @@ function lowercaseFirstLetter(string) {
   return string.charAt(0).toLowerCase() + string.slice(1)
 }
 
-function newFileName(filename, type, newName) {
+function newFilePath(filePath, type, name) {
   const replacedFirstCharLowercase = replaceAll(
-    filename,
+    filePath,
     `{% ${lowercaseFirstLetter(type)} %}`,
-    lowercaseFirstLetter(newName)
+    lowercaseFirstLetter(name)
   )
   const replacedFirstCharUppercase = replaceAll(
     replacedFirstCharLowercase,
     `{% ${capitalizeFirstLetter(type)} %}`,
-    capitalizeFirstLetter(newName)
+    capitalizeFirstLetter(name)
   )
 
   return replacedFirstCharUppercase

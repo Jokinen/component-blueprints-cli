@@ -4,7 +4,7 @@ import createBlueprint from './createBlueprint'
 import {
   replaceAll,
   escapeRegExp,
-  newFileName,
+  newFilePath,
   capitalizeFirstLetter,
   lowercaseFirstLetter,
   createDirectory,
@@ -61,19 +61,19 @@ test('utils exports', (t) => {
   })
 })
 
-test('newFileName', (t) => {
+test('newFilePath', (t) => {
   const type = 'testValue'
-  const filenameLowerCase = `{% testValue %}.js`
+  const filenameLowerCase = `{% TestValue %}/{% testValue %}.js`
   const filenameUpperCase = `{% TestValue %}.js`
   const newName = 'givenName'
 
   t.is(
-    newFileName(filenameLowerCase, type, newName),
-    newName + '.js',
+    newFilePath(filenameLowerCase, type, newName),
+    'GivenName/givenName.js',
     'should replace lowercase instances of type with a lowercase newName'
   )
   t.is(
-    newFileName(filenameUpperCase, type, newName),
+    newFilePath(filenameUpperCase, type, newName),
      'GivenName.js',
     'should replace instances of {type} with newName'
   )
