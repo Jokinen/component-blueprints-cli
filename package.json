@@ -1,6 +1,6 @@
 {
   "name": "create-from-blueprint",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A command-line tool for generating file structures from blueprints",
   "main": "index.js",
   "bin": {
