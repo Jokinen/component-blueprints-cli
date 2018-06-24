@@ -18,7 +18,9 @@ test.before(() => {
   if (!fs.existsSync(notRelative('blueprints'))) {
     fs.mkdirSync(notRelative('blueprints'))
     fs.mkdirSync(notRelative('blueprints/{% component %}'))
-    fs.writeFileSync(notRelative('blueprints/{% component %}/{% Component %}.js', 'Content'))
+    fs.writeFileSync(
+      notRelative('blueprints/{% component %}/{% Component %}.js', 'Content')
+    )
   }
 
   if (!fs.existsSync(notRelative('src'))) {
@@ -44,7 +46,7 @@ test('createBlueprint', async (t) => {
   const targetDir = 'src/components'
   const name = 'someComponent'
   const configs = {
-    component: 'blueprints/{% component %}'
+    component: 'blueprints/{% component %}',
   }
 
   try {
@@ -55,7 +57,7 @@ test('createBlueprint', async (t) => {
   }
 
   const err = await new Promise((resolve) => {
-    fs.stat(`${ targetDir }`, (err) => {
+    fs.stat(`${targetDir}`, (err) => {
       if (err) {
         return resolve(err)
       }
@@ -63,7 +65,7 @@ test('createBlueprint', async (t) => {
       resolve()
     })
   })
-  
+
   t.falsy(err, 'should create the new files as expected')
 })
 
@@ -95,7 +97,7 @@ test('newFilePath', (t) => {
   )
   t.is(
     newFilePath(filenameUpperCase, type, newName),
-     'GivenName.js',
+    'GivenName.js',
     'should replace instances of {type} with newName'
   )
 })
@@ -111,8 +113,8 @@ test('replaceAll', (t) => {
     'should replace every instance of find with replace'
   )
   t.is(
-    replaceAll('{test}', '{', '['), 
-    '[test}', 
+    replaceAll('{test}', '{', '['),
+    '[test}',
     'should handle characters which need escaping'
   )
 })
