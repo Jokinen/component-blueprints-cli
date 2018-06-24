@@ -1,5 +1,7 @@
 # Create from Blueprint [![CircleCI](https://circleci.com/gh/Jokinen/create-from-blueprint.svg?style=shield)](https://circleci.com/gh/Jokinen/create-from-blueprint)
 
+**BETA version disclaimer**: This package is still very volatile, use with caution.
+
 Gives ability to copy a file structure into a certain path renaming the file paths and the files' content.
 
 Can be used with React to provide `component` and `container` blueprints, in which case creating a new component is done with a single command instead of manually creating and filling all the files. This has the added benefit of providing teams the ability to offer and enforce common patterns for developers.
