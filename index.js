@@ -6,7 +6,6 @@ const chalk = require('chalk')
 const program = require('commander')
 const configs = require(path.resolve(process.cwd(), 'package.json'))
   .createFromBlueprint
-const lowercaseFirstLetter = require('./utils').lowercaseFirstLetter
 
 program
   .arguments('<destination>')
@@ -22,12 +21,10 @@ program
       ;({ name, type } = await getInquirer())
     }
 
-    const lowerCaseName = lowercaseFirstLetter(name)
-    const lowerCaseType = lowercaseFirstLetter(type)
     try {
-      await createBlueprint(lowerCaseName, lowerCaseType, destination, configs)
+      await createBlueprint(name, type, destination, configs)
 
-      success(destination, lowerCaseName, lowerCaseType)
+      success(destination, name, type)
     } catch (e) {
       process.stderr.write(chalk.red(e + '\n'))
     }

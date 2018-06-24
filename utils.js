@@ -27,8 +27,8 @@ function lowercaseFirstLetter(string) {
 function newFileName(filename, type, newName) {
   const replacedFirstCharLowercase = replaceAll(
     filename,
-    `{% ${type} %}`,
-    newName
+    `{% ${lowercaseFirstLetter(type)} %}`,
+    lowercaseFirstLetter(newName)
   )
   const replacedFirstCharUppercase = replaceAll(
     replacedFirstCharLowercase,
