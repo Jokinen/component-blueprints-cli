@@ -22,8 +22,8 @@ npm i --save-dev create-from-blueprint
 ```json
 {
   "createFromBlueprint": {
-    "component": "blueprints/{% component %}/",
-    "container": "blueprints/{% container %}/"
+    "component": "blueprints/component/",
+    "container": "blueprints/container/"
   }
 }
 ```
@@ -31,7 +31,7 @@ npm i --save-dev create-from-blueprint
 Type of the blueprint (`component`, `container`)  
 
 **`value`**  
-A path pointing to an existing folder (`blueprints/{% component %}/`, ...)
+A path pointing to an existing folder (`blueprints/component/`, ...)
 
 ### 2. Run the command
 ```
@@ -41,7 +41,7 @@ create-from-blueprint <destination>
 2.2. **And input a `name`** 
  
 Instances of `type`, beginning with a lowercase or uppercase letter, will be replaced with `name`
-* **`In file paths`**: Every instance of `{% type %}` will be replaced with `name`
+* **`In file paths`**: Every instance of `{% type %}` will be replaced with `name` for the files within the folder the blueprint config targets
 * **`In file contents`**: Every instance of `type` will be replaced with `name`
 
 <sup>1</sup> The list consists of `keys` from the config field 

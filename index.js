@@ -21,9 +21,14 @@ program
     }
 
     try {
-      await createBlueprint(type, name, destination, configs)
+      const createdFiles = await createBlueprint(
+        type,
+        name,
+        destination,
+        configs
+      )
 
-      success(destination, name, type)
+      success(destination, name, type, createdFiles)
     } catch (e) {
       process.stderr.write(chalk.red(e.stack + '\n'))
     }
