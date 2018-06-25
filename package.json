@@ -42,6 +42,6 @@
     "prettier": "^1.13.5"
   },
   "createFromBlueprint": {
-    "component": "testProject/blueprints/{% component %}"
+    "component": "testProject/blueprints/component"
   }
 }

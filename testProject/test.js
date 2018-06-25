@@ -33,7 +33,8 @@ test('cli tool', async (t) => {
   const files = fs.readdirSync('testProject/src/components/invoiceItem')
 
   t.true(
-    files.includes('InvoiceItem.js'),
+    files.includes('InvoiceItem.js') && files.includes('InvoiceItem.spec.js'),
+    files.includes('subComponents'),
     'Should create file with correct case'
   )
 })

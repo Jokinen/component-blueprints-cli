@@ -5,27 +5,24 @@ const junk = require('junk')
 const escapeRegExp = require('./utils').escapeRegExp
 const newFilePath = require('./utils').newFilePath
 const capitalizeFirstLetter = require('./utils').capitalizeFirstLetter
-const lowercaseFirstLetter = require('./utils').lowercaseFirstLetter
 const createDirectory = require('./utils').createDirectory
 
 function readdir(dir) {
   return new Promise((resolve) => {
     fs.readdir(dir, (err, files) => {
       if (err) {
-        return resolve([err, files])
+        throw err
       }
 
-      resolve([err, files])
+      resolve(files)
     })
   })
 }
 
-function renameInjectCopy(file, blueprintSourceDir, targetDir, type, name) {
+function injectCopy(from, to, type, name) {
   return new Promise((resolve, reject) => {
-    const source = path.join(blueprintSourceDir, file)
-    const destination = newFilePath(path.join(targetDir, file), type, name)
-    const read = fs.createReadStream(source)
-    const write = fs.createWriteStream(destination)
+    const read = fs.createReadStream(from)
+    const write = fs.createWriteStream(to)
     const capitalizedType = capitalizeFirstLetter(type)
     const capitalizedName = capitalizeFirstLetter(name)
 
@@ -42,6 +39,66 @@ function renameInjectCopy(file, blueprintSourceDir, targetDir, type, name) {
   })
 }
 
+function replaceBasePath(filePath, replaced, replacer) {
+  return filePath.replace(new RegExp(escapeRegExp(replaced), 'g'), replacer)
+}
+
+async function walk(fileOrDirectoryList, opts) {
+  const fileOperations = fileOrDirectoryList.map(
+    (fileOrDirectoryPath) =>
+      new Promise((resolve, reject) => {
+        fs.stat(fileOrDirectoryPath, async (err, stats) => {
+          if (err) {
+            throw err
+          }
+
+          const { blueprintSourceDir, destinationDir, type, name } = opts
+          const destinationFileOrDirectory = newFilePath(
+            replaceBasePath(
+              fileOrDirectoryPath,
+              blueprintSourceDir,
+              destinationDir
+            ),
+            type,
+            name
+          )
+
+          if (stats.isDirectory()) {
+            try {
+              const files = await readdir(fileOrDirectoryPath)
+
+              await createDirectory(destinationFileOrDirectory)
+
+              const relativePaths = files
+                .filter(junk.not)
+                .map((file) => path.join(fileOrDirectoryPath, file))
+              const results = await walk(relativePaths, opts)
+
+              resolve(results)
+            } catch (e) {
+              throw e
+            }
+          } else {
+            const err = await injectCopy(
+              fileOrDirectoryPath,
+              destinationFileOrDirectory,
+              type,
+              name
+            )
+
+            if (err) {
+              throw err
+            }
+
+            resolve(destinationFileOrDirectory)
+          }
+        })
+      })
+  )
+
+  return Promise.all(fileOperations)
+}
+
 async function createBluePrint(type, name, destination, configs) {
   if (!configs) {
     throw new Error('No configs found')
@@ -54,34 +111,28 @@ async function createBluePrint(type, name, destination, configs) {
   }
 
   const blueprintSourceDir = path.resolve(process.cwd(), blueprintSource)
-  // Hack
-  const newDirName = blueprintSource.includes(capitalizeFirstLetter(type))
-    ? capitalizeFirstLetter(name)
-    : lowercaseFirstLetter(name)
-  const targetDir = path.join(process.cwd(), destination, newDirName)
+  const destinationDir = path.resolve(process.cwd(), destination)
 
-  const directoryCreationErr = await createDirectory(targetDir)
+  try {
+    const files = await readdir(blueprintSourceDir)
 
-  if (directoryCreationErr) {
-    throw directoryCreationErr
+    if (!files || files.length === 0) {
+      throw new Error("The blueprint is empty or doesn't exist")
+    }
+
+    const relativeFiles = files
+      .filter(junk.not)
+      .map((file) => path.join(blueprintSourceDir, file))
+
+    return await walk(relativeFiles, {
+      blueprintSourceDir,
+      destinationDir,
+      type,
+      name,
+    })
+  } catch (e) {
+    throw e
   }
-
-  const [fileSearchErr, files] = await readdir(blueprintSourceDir)
-
-  if (fileSearchErr) {
-    throw fileSearchErr
-  }
-  if (!files || files.length === 0) {
-    throw new Error("The blueprint is empty or doesn't exist")
-  }
-
-  const fileCopies = files
-    .filter(junk.not)
-    .map((file) =>
-      renameInjectCopy(file, blueprintSourceDir, targetDir, type, name)
-    )
-
-  return Promise.all(fileCopies)
 }
 
 module.exports = createBluePrint

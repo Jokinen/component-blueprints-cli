@@ -12,14 +12,22 @@ import {
   createDirectory,
 } from './utils'
 
+// Mock-fs didn't work properly for these tests. I never could find out the
+// reason, but the test process could be made a lot more simple if iy could be
+// used to mock the filesystem.
+
 test.before(() => {
   const notRelative = (p) => path.resolve(process.cwd(), p)
 
   if (!fs.existsSync(notRelative('blueprints'))) {
     fs.mkdirSync(notRelative('blueprints'))
-    fs.mkdirSync(notRelative('blueprints/{% component %}'))
+    fs.mkdirSync(notRelative('blueprints/component'))
+    fs.mkdirSync(notRelative('blueprints/component/{% component %}'))
     fs.writeFileSync(
-      notRelative('blueprints/{% component %}/{% Component %}.js', 'Content')
+      notRelative(
+        'blueprints/component/{% component %}/{% Component %}.js',
+        'Content'
+      )
     )
   }
 
@@ -39,14 +47,14 @@ test.after.always(() => {
 test('createBlueprint', async (t) => {
   t.truthy(createBlueprint, 'should be defined')
 
-  if (!fs.existsSync('blueprints/{% component %}')) {
-    t.fails('The file should be created')
+  if (!fs.existsSync('blueprints/component/{% component %}')) {
+    t.fail('The file should be created')
   }
 
   const targetDir = 'src/components'
   const name = 'someComponent'
   const configs = {
-    component: 'blueprints/{% component %}',
+    component: 'blueprints/component',
   }
 
   try {
@@ -57,7 +65,7 @@ test('createBlueprint', async (t) => {
   }
 
   const err = await new Promise((resolve) => {
-    fs.stat(`${targetDir}`, (err) => {
+    fs.stat(`${targetDir}/${name}`, (err) => {
       if (err) {
         return resolve(err)
       }
