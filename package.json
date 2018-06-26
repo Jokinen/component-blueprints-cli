@@ -1,6 +1,6 @@
 {
   "name": "create-from-blueprint",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A command-line tool for generating file structures from blueprints",
   "main": "index.js",
   "bin": {
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jokinen/create-component.git"
+    "url": "git+https://github.com/Jokinen/create-from-blueprint.git"
   },
   "author": "Jaakko Jokinen",
   "license": "MIT",
